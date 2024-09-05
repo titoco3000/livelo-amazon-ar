@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en-us" style="overflow: hidden;">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player</title>
+	<!-- mindar files -->
+	<script src="js/mindar-image.prod"></script>
+	<script src="js/aframe.min"></script>
+	<script src="js/mindar-image-aframe.prod"></script>
+	<style>.tmpHidden {display: none;}</style>
+	<!-- finish mindar files -->
+	<script src="Build/web.loader.js"></script>
+	<style>
+		.jumplink {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			width: max(15vw, 50px);
+			height: max(15vw, 50px);
+			background-color: #df0777;
+			color: white;
+			font-size: max(10.5vw, 35px);
+			display: flex;
+			line-height: max(15vw, 50px);
+			text-align: center;
+			text-decoration: none;
+			border-radius: max(15vw, 50px);
+			justify-content: center;
+			align-items: center;
+			scale: 0.75;
+			z-index: 2;
+		}
+		.logo-livelo {
+			top: 40px;
+			left: 30px;
+			position: absolute;
+			z-index: 2;
+			display: flex;
+			width: max(30vw, 150px);
+			justify-content: center;
+			align-items: center;
+		}
+		.logo-livelo img {
+			width: 100%;
+			height: auto;
+		}
+	</style>
+  </head>
+  <body style="text-align: center; margin: 0px; padding: 0px; overflow: hidden; ">
+	<div id="unity-container" class="unity-desktop" style="z-index: 2; position: absolute; top: 0; left: 0;">
+        <canvas id="unity-canvas" style="background: #231F20; width: 100%; height: 100%;"></canvas>
+		<div id="unity-loading-bar" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none;">
+			<div id="unity-logo" style="width: 154px; height: 130px; background: url('images/unity-logo-dark.png') no-repeat center;"></div>
+			<div id="unity-progress-bar-empty" style="width: 141px; height: 18px; margin-top: 10px; margin-left: 6.5px; background: url('images/progress-bar-empty-dark.png') no-repeat center;">
+			  <div id="unity-progress-bar-full" style="width: 0%; height: 18px; margin-top: 10px; background: url('images/progress-bar-full-dark.png') no-repeat center;"></div>
+			</div>
+		</div>
+	</div>
+	<a class="jumplink" href="https://www.livelo.com.br/?ref=webarexp" >></a>
+	<a class="logo-livelo" href="https://www.livelo.com.br/?ref=webarexp" >
+		<img style='display:block;' id='base64image' src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYyIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDU2MiAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xNzAuMzQ0IDAuMTY2NTA0Vjk5LjIyOUwxODcuNjcgOTYuMTY5N1YxMTUuMTUxQzE4Ny42NyAxMTUuNjM3IDE4Ny4zMjIgMTE2LjA1MiAxODYuODQ0IDExNi4xMzZMMTY4LjMwMiAxMTkuNDAzQzE1Ny43MSAxMjEuMjY5IDE0OCAxMTMuMTIxIDE0OCAxMDIuMzY2VjUuNzg1MTFDMTQ4IDQuODE0NTQgMTQ4LjY5NyAzLjk4NDA3IDE0OS42NTMgMy44MTU1TDE3MC4zNDQgMC4xNjY1MDRaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTM1MC4wNyA5NS4zMjA1QzM0OC4yOTggOTMuMDg2MiAzNDYuOTggOTAuNjEwNyAzNDYuMjA3IDg3LjgwNDdDMzQ2LjIwNyA4Ny44MDQ3IDQwNi45NzIgNzcuMDgwNCA0MTMuMTIgNzUuOTkwNUM0MTQuMzUgNzUuNzkwNSA0MTQuNTUgNzUuMjYwNSA0MTQuNDMgNzQuMjYwNUM0MTQuMzA3IDczLjE5NzIgNDE0LjIxMyA3Mi4xMjU4IDQxNC4xMiA3MS4wNTM4QzQxMy45MTggNjguNzM4NCA0MTMuNzE2IDY2LjQxOTIgNDEzLjIxIDY0LjE3MDVDNDEwLjA4IDUwLjIyMDUgNDAyLjQyIDM5LjYyMDUgMzg5LjMgMzMuNDQwNUMzNzkuNDQgMjguODAwNSAzNjkuMDIgMjguMDAwNSAzNTguNDQgMzAuMjgwNUMzNDQuMzggMzMuMzEwNSAzMzMuOTYgNDEuMjAwNSAzMjcuODggNTQuMzUwNUMzMjMuMzUgNjQuMTUwNSAzMjIuNiA3NC40NTA1IDMyNC43MiA4NC45NDA1QzMyNy4zOCA5OC4wODA1IDMzNC4zOCAxMDguMTkxIDM0Ni40NiAxMTQuMzcxQzM1Ny4yMyAxMTkuODcxIDM2OC43MSAxMjAuOCAzODAuNDYgMTE4LjcyQzM5NC42NCAxMTYuMjAxIDQwNS4xMiAxMDguNTgxIDQxMS4zNCA5NS40ODA1QzQxMi4yMzMgOTMuNjA2IDQxMi45MDIgOTEuNjIxNiA0MTMuNjA0IDg5LjUzOTdMNDEzLjYwNCA4OS41Mzg2TDQxMy42MDUgODkuNTM3NEw0MTMuNjA5IDg5LjUyNTJMNDEzLjYwOSA4OS41MjM5QzQxMy45MTggODguNjA2NiA0MTQuMjM0IDg3LjY2OTYgNDE0LjU3OCA4Ni43MTU1QzQxNC41OTEgODYuNjgxNSA0MTQuNjA0IDg2LjY0MiA0MTQuNjE4IDg2LjYwMTlMNDE0LjYxOSA4Ni42TDQxNC42MiA4Ni41OTc0TDQxNC42MzYgODYuNTUwNEM0MTQuNjQ2IDg2LjUxOTYgNDE0LjY1NyA4Ni40ODk4IDQxNC42NjYgODYuNDYzNEM0MTQuNjY2IDg2LjQ2MzQgNDAxLjIxMyA4OC44NDA0IDM5NC41MSA5MC4wMjA1QzM5My45NCA5MC4xMjA1IDM5My4yMSA5MC41NjA1IDM5Mi45OCA5MS4wNTA1QzM5MC42NCA5Ni4wMzA1IDM4Ni45NCA5OS41ODA1IDM4MS44OCAxMDEuNjcxQzM3Ni4wMSAxMDQuMDkxIDM2OS45MSAxMDQuMzMxIDM2My43MyAxMDMuMjExQzM1OC4yNCAxMDIuMjExIDM1My41OCA5OS43NDA1IDM1MC4wNyA5NS4zMjA1Wk0zOTIuODkgNjIuMTU4NUMzOTIuOTkgNjIuNDk3NiAzOTMuMDkzIDYyLjg0NjcgMzkzLjIwNCA2My4yMDg1TDM0NC43IDcxLjc2MDVDMzQ0LjczMSA3MS4yODQ3IDM0NC43NTMgNzAuODI3OCAzNDQuNzc1IDcwLjM4NDVMMzQ0Ljc3NSA3MC4zODMxQzM0NC44MjMgNjkuMzgyOCAzNDQuODY4IDY4LjQ1MTggMzQ1IDY3LjUzMDVDMzQ1Ljc0IDYyLjQzMDUgMzQ3LjE4IDU3LjU4MDUgMzUwLjI3IDUzLjM1MDVDMzU0LjEyIDQ4LjA5MDUgMzU5LjQzIDQ1LjQ0MDUgMzY1LjggNDQuNjgwNUMzNzAuMzkgNDQuMTMwNSAzNzQuOSA0NC41MDA1IDM3OS4yNCA0Ni4xMjA1QzM4NS43NiA0OC41NjA1IDM4OS43OSA1My40MTA1IDM5Mi4xNCA1OS44MDA1QzM5Mi40MTYgNjAuNTU1MiAzOTIuNjQ0IDYxLjMyNyAzOTIuODkgNjIuMTU4NVoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNNDgzLjcyIDEwOS43OEM0OTIuNjEgMTE2Ljc3IDUwMi45MSAxMTkuNjEgNTE0LjA5IDExOS42NUM1MjAuMjEgMTE5LjY4IDUyNi4yIDExOC44NCA1MzEuOTYgMTE2LjczQzU0My40NCAxMTIuNTMgNTUyIDEwNS4wOCA1NTcuMiA5My45NTA0QzU2MS40NiA4NC44NDA0IDU2Mi41NCA3NS4zNDA0IDU2MC43MiA2NS40NjA0QzU1OS44NyA2MC44MTA0IDU1OC4yNiA1Ni40MjA0IDU1Ni4xNCA1Mi4yNjA0QzU1NC45MjcgNDkuODgwOCA1NTMuMTU2IDQ3Ljc1MjkgNTUxLjQyNCA0NS42NzIyTDU1MS4xNCA0NS4zMzA0QzU0Ni4xOSAzOS4zNjA0IDU0MC4wMSAzNS4wNjA0IDUzMi43MyAzMi4zNzA0QzUyMi45MyAyOC43NTA0IDUxMi44OCAyOC4yMDA0IDUwMi43MiAzMC4zMTA0QzQ5Mi4xOSAzMi41MDA0IDQ4My4yNyAzNy41OTA0IDQ3Ni42IDQ2LjEzMDRDNDY4LjA4IDU3LjAzMDQgNDY1LjE5IDY5LjQwMDQgNDY3LjYzIDgyLjk3MDRDNDY5LjYgOTMuOTEwNCA0NzQuOTcgMTAyLjkgNDgzLjcyIDEwOS43OFpNNDg3Ljk5MyA3Ny4wMzM0QzQ4Ny45MzEgNzYuNDk2NiA0ODcuODc4IDc2LjAyNjEgNDg3LjgyIDc1LjY1MDRDNDg4LjAyIDY2LjE3MDQgNDkwLjYzIDU4Ljk5MDQgNDk2LjgzIDUzLjM1MDRDNTAwLjg5IDQ5LjY3MDQgNTA1Ljc3IDQ3LjcyMDQgNTExLjE3IDQ3LjI0MDRDNTE4LjA3IDQ2LjYzMDQgNTI0LjU2IDQ3LjkxMDQgNTMwLjE5IDUyLjIzMDRDNTM1LjYgNTYuMzcwNCA1MzguNzIgNjEuOTQwNCA1MzkuOTYgNjguNTMwNEM1NDEuNTYgNzcuMDQwNCA1NDAuMSA4NS4wMjA0IDUzNC44MSA5Mi4wMjA0QzUzMC41NSA5Ny42NzA0IDUyNC43MiAxMDAuNjYgNTE3LjcgMTAxLjVDNTEyLjg0IDEwMi4wOCA1MDguMTMgMTAxLjU5IDUwMy42NCA5OS43MjA0QzQ5NS43MiA5Ni40MzA0IDQ5MC45OCA5MC4zMjA0IDQ4OC44NSA4Mi4xNjA0QzQ4OC4zNzEgODAuMzM4OCA0ODguMTU1IDc4LjQ1MzkgNDg3Ljk5MyA3Ny4wMzM0WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTI2Ny4xODYgMTE5LjQ5N0wyODMuNzEgMTE2Ljg3MkMyODQuMzg3IDExNi43NTcgMjg0Ljk1OCAxMTYuMzAxIDI4NS4yMjEgMTE1LjY2N0wzMTEuOTIgNTEuMjkyMkMzMTIuMTg4IDUwLjY0NDkgMzEyLjc3NiA1MC4xODU0IDMxMy40NjkgNTAuMDgwOEwzMTguMzE4IDQ5LjI0MzVDMzE5LjA1MSA0OS4xMTA0IDMxOS41OTQgNDguNTAyMyAzMTkuNTk0IDQ3Ljc2MDNMMzE5LjU5NCAyOS4xMzEzTDMwNy42OTkgMzEuMjMyNkMzMDEuMzU1IDMyLjI3MTIgMjk2LjA0NiAzNi42MTQxIDI5My43NzEgNDIuNjI2NUwyNzQuNzY4IDkyLjg1MzJMMjUxLjcyNyAzMi4xOTM5QzI1MS41MDUgMzEuNjExNyAyNTAuOTAzIDMxLjI2ODEgMjUwLjI4OSAzMS4zNzQ2TDIzMC44OTcgMzQuNzg3NkwyNjUuNTQ4IDExOC41OTJDMjY1LjgxNSAxMTkuMjM5IDI2Ni40OTUgMTE5LjYxNSAyNjcuMTg2IDExOS40OTdaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNNDQ2LjM1NCA5OS4yMjlWMC4xNjY1MDRMNDI1LjY2MyAzLjgxNTVDNDI0LjcwNyAzLjk4NDA3IDQyNC4wMSA0LjgxNDU0IDQyNC4wMSA1Ljc4NTExVjEwMi4zNjZDNDI0LjAxIDExMy4xMjEgNDMzLjcyIDEyMS4yNjkgNDQ0LjMxMiAxMTkuNDAzTDQ2Mi44NTQgMTE2LjEzNkM0NjMuMzMxIDExNi4wNTIgNDYzLjY4IDExNS42MzcgNDYzLjY4IDExNS4xNTFWOTYuMTY5N0w0NDYuMzU0IDk5LjIyOVoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0yMTAuODIgMjIuNTkwM0MyMTYuOTAxIDIyLjU5MDMgMjIxLjgzIDE3LjY2MSAyMjEuODMgMTEuNTgwM0MyMjEuODMgNS40OTk2NiAyMTYuOTAxIDAuNTcwMzEyIDIxMC44MiAwLjU3MDMxMkMyMDQuNzM5IDAuNTcwMzEyIDE5OS44MSA1LjQ5OTY2IDE5OS44MSAxMS41ODAzQzE5OS44MSAxNy42NjEgMjA0LjczOSAyMi41OTAzIDIxMC44MiAyMi41OTAzWiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTIwMC4wMSAzNi4zNzYyQzIwMC4wMSAzNS42NzMgMjAwLjUxNSAzNS4wNzExIDIwMS4yMDcgMzQuOTQ4NUwyMjEuNjQgMzEuMzMwM1YxMTQuNDY4QzIyMS42NCAxMTUuMTcxIDIyMS4xMzUgMTE1Ljc3MyAyMjAuNDQzIDExNS44OTZMMjAwLjAxIDExOS41MVYzNi4zNzYyWiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTU4LjAwMDEgMTE4LjE2N0M0OC42MjAzIDExOC4xMDEgNDIuNTA3NCAxMTQuMTQ4IDM5LjA5NTIgMTA1LjM3NUMzNy4zOTg3IDEwMS4wMSAzNi4wMzczIDk2LjQ5NzYgMzQuODI4NSA5MS45Njc5QzM0LjIxNTggODkuNjczOCAzMy4yNjk0IDg3Ljc3IDMxLjg2NzggODYuMjk4OEMzMC4zOTY1IDg0Ljg5NzEgMjguNDkyNyA4My45NTA4IDI2LjE5ODYgODMuMzM4QzIxLjY2ODkgODIuMTI5MiAxNy4xNTYxIDgwLjc2NzggMTIuNzkxOCA3OS4wNzEzQzQuMDE4NjQgNzUuNjU5MSAwLjA2NTc1MjggNjkuNTQ2MiAwIDYwLjE2NjZDMC4wNjU3NTI4IDUwLjc4NjggNC4wMTg2NCA0NC42NzM5IDEyLjc5MTggNDEuMjYxN0MxNy4xNTYxIDM5LjU2NTIgMjEuNjY4OSAzOC4yMDM4IDI2LjE5ODYgMzYuOTk1QzI4LjQ5MjcgMzYuMzgyMyAzMC4zOTY1IDM1LjQzNTkgMzEuODY3OCAzNC4wMzQzQzMzLjI2OTQgMzIuNTYzIDM0LjIxNTggMzAuNjU5MiAzNC44Mjg1IDI4LjM2NTFDMzYuMDM3MyAyMy44MzU0IDM3LjM5ODcgMTkuMzIyNiAzOS4wOTUyIDE0Ljk1ODNDNDIuNTA3NCA2LjE4NTE0IDQ4LjYyMDMgMi4yMzIyNiA1OCAyLjE2NjVDNjcuMzc5NyAyLjIzMjI2IDczLjQ5MjYgNi4xODUxNCA3Ni45MDQ4IDE0Ljk1ODNDNzguNjAxMyAxOS4zMjI2IDc5Ljk2MjcgMjMuODM1NCA4MS4xNzE1IDI4LjM2NTFDODEuNzg0MiAzMC42NTkyIDgyLjczMDYgMzIuNTYzIDg0LjEzMjIgMzQuMDM0M0M4NS42MDM1IDM1LjQzNTkgODcuNTA3MyAzNi4zODIzIDg5LjgwMTQgMzYuOTk1Qzk0LjMzMTEgMzguMjAzOCA5OC44NDM5IDM5LjU2NTIgMTAzLjIwOCA0MS4yNjE3QzExMS45ODEgNDQuNjczOSAxMTUuOTM0IDUwLjc4NjggMTE2IDYwLjE2NjVDMTE1LjkzNCA2OS41NDYyIDExMS45ODEgNzUuNjU5MSAxMDMuMjA4IDc5LjA3MTNDOTguODQzOSA4MC43Njc4IDk0LjMzMTEgODIuMTI5MiA4OS44MDE0IDgzLjMzOEM4Ny41MDczIDgzLjk1MDggODUuNjAzNSA4NC44OTcxIDg0LjEzMjIgODYuMjk4OEM4Mi43MzA2IDg3Ljc3IDgxLjc4NDIgODkuNjczOCA4MS4xNzE1IDkxLjk2NzlDNzkuOTYyNyA5Ni40OTc2IDc4LjYwMTMgMTAxLjAxIDc2LjkwNDggMTA1LjM3NUM3My40OTI2IDExNC4xNDggNjcuMzc5NyAxMTguMTAxIDU4LjAwMDEgMTE4LjE2N1oiIGZpbGw9IiNGRjBBOEMiLz4KPC9zdmc+Cg==' />
+	</a>
+	
+    <script>
+	  var container = document.querySelector("#unity-container");
+	  var canvas = document.querySelector("#unity-canvas");
+	  var loadingBar = document.querySelector("#unity-loading-bar");
+	  var progressBarFull = document.querySelector("#unity-progress-bar-full");
+	  
+	  /*mindar code*/
+	  var mindARStr = "<a-scene id='MindAR-scene' mindar-image='imageTargetSrc: Compiled Target/target.mind; autoStart: true; maxTrack: 1; numberTrack: 2; uiError:yes; uiLoading:yes; uiScanning:yes; uiScanningOnTargetLost: yes; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 5; missTolerance: 5;' color-space='sRGB' renderer='colorManagement: true, physicallyCorrectLights' vr-mode-ui='enabled: false' device-orientation-permission-ui='enabled: false'>\n\t<a-camera position='0 0 0' look-controls='enabled: false'></a-camera>\n";
+	  
+	  var imageTargetsStr = '';
+	  for (var i = 0; i < 2; ++i) {
+		imageTargetsStr += "\t<a-entity mindar-image-target='targetIndex: " + i + "'></a-entity>\n";
+	  }
+	  
+	  imageTargetsStr += "</a-scene>";
+	  
+	  mindARStr += imageTargetsStr;
+	  
+	  container.insertAdjacentHTML('beforebegin', mindARStr);
+	  
+	  var uiScanning, uiLoading;
+	  
+	  var uiScanningInterval = setInterval(() => {
+	    uiLoading = document.getElementById('MindAR-scene').getAttribute('mindar-image').uiLoading;
+		uiScanning = document.getElementById('MindAR-scene').getAttribute('mindar-image').uiScanning;
+		if (uiScanning) {
+			clearInterval(uiScanningInterval);
+			if (uiScanning !== 'no') {
+				uiScanning = uiScanning === 'yes' ? document.querySelector('.mindar-ui-scanning') : document.querySelector(uiScanning);
+				uiScanning.classList.add('tmpHidden');
+			}
+			if (uiLoading !== 'no') {
+				uiLoading = uiLoading === 'yes' ? document.querySelector('.mindar-ui-loading') : document.querySelector(uiLoading);
+				uiLoading.classList.add('tmpHidden');
+			}
+		}
+	  }, 0);
+	  
+	  /*finish mindar code*/
+      
+	  var buildUrl = "Build";
+	  var config = {
+        dataUrl: buildUrl + "/web.data",
+        frameworkUrl: buildUrl + "/web.framework.js",
+			codeUrl: buildUrl + "/web.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "LIVELO AMAZON 3",
+        productVersion: "0.1",
+      };
+	  
+	  if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+		
+		container.style.width = '100%';
+		container.style.height = '100%';
+		
+        // To lower canvas resolution on mobile devices to gain some
+        // performance, uncomment the following line:
+        // config.devicePixelRatio = 1;
+      } else {
+
+        canvas.style.width = window.innerWidth + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+		
+		container.style.left = '50%';
+		container.style.top = '50%';
+		container.style.transform = 'translate(-50%, -50%)';
+		
+      }
+	  
+	  loadingBar.style.display = "block";
+
+      createUnityInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = 100 * progress + "%";
+        }).then(ui => {
+			loadingBar.style.display = "none";
+			
+			/*mindar code*/
+			canvas.style.background = "transparent";
+			uiScanning.classList?.remove('tmpHidden');
+			uiLoading.classList?.remove('tmpHidden');
+			/*finish mindar code*/
+			
+	  });
+    </script>
+  </body>
+</html>
